@@ -1,1 +1,48 @@
-<!-- Frontend files go here -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate Verification</title>
+</head>
+
+<body>
+
+    <h1>Certificate Verification System</h1>
+
+    <form id="verifyForm">
+        <input type="text" id="certificate_id" placeholder="Enter Certificate ID" required>
+        <button type="submit">Verify</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script>
+        document.getElementById("verifyForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            let cert_id = document.getElementById("certificate_id").value;
+
+            let response = await fetch("http://127.0.0.1:5000/verify", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    certificate_id: cert_id
+                })
+            });
+
+            let data = await response.json();
+
+            if (data.status === "valid") {
+                document.getElementById("result").innerText =
+                    "VALID CERTIFICATE ✔️";
+            } else {
+                document.getElementById("result").innerText =
+                    "INVALID CERTIFICATE ❌";
+              
+            }
+        });
+    </script>
+
+</body>
+</html>
